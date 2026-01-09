@@ -1,0 +1,18 @@
+services:
+  toradex-modular-debug:
+    build:
+      context: .
+      dockerfile: Dockerfile.debug
+    image: ${LOCAL_REGISTRY}:5002/toradex-modular-debug:${TAG}
+    ports:
+      - ${DEBUG_SSH_PORT}:${DEBUG_SSH_PORT}
+    profiles:
+      - debug
+      
+  toradex-modular:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${DOCKER_LOGIN}/toradex-modular:${TAG}
+    profiles:
+      - release

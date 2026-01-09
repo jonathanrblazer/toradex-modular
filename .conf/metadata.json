@@ -1,0 +1,8 @@
+{
+    "projectName": "toradexModular",
+    "templateName": "cppConsole",
+    "containerName": "toradex-modular",
+    "torizonOSMajor": "7",
+    "hasCustomFields": false,
+    "customFields": []
+}
