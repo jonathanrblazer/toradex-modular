@@ -7,11 +7,30 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
+#include <dirent.h>
 
-static const char *SERIAL_DEV = "/dev/ttyACM0";
 static const int BAUDRATE = B115200;
 
 std::atomic<bool> running{true};
+
+std::vector<std::string> findACMports()
+{
+    std::vector<std::string> ports;
+    DIR* dir = opendir("/dev");
+    if (!dir)
+        return ports;
+
+    dirent* entry;
+    while ((entry = readdir(dir)) != nullptr) {
+        std::string name(entry->d_name);
+        if (name.rfind("ttyACM", 0) == 0) {
+            ports.emplace_back("/dev/" + name);
+        }
+    }
+
+    closedir(dir);
+    return ports;
+}
 
 int open_serial(const char *dev)
 {
@@ -74,9 +93,17 @@ void rx_thread(int fd)
 
 int main()
 {
-    std::cout << "Opening serial device: " << SERIAL_DEV << std::endl;
+    auto ports = findACMports();
 
-    int fd = open_serial(SERIAL_DEV);
+    if (ports.empty()) {
+        std::cerr << "No ttyACM devices found." << std::endl;
+        return 1;
+    }
+
+    std::string port = ports[0];
+    std::cout << "Opening serial device: " << port << std::endl;
+
+    int fd = open_serial(port.c_str());
     if (fd < 0)
         return 1;
 
