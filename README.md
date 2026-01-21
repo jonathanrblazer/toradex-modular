@@ -40,3 +40,38 @@ docker run -it \
   --name ts \
   jonathanrblazer/torizon-serial:dev
 
+----------- FOR DEBUGGING ---------------
+
+docker build \
+  -f Dockerfile.debug \
+  -t torizon-serial:debug .
+
+docker run -it \
+  --user 0 \
+  --mount type=bind,source=/dev,target=/dev \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  -p 2345:2345 \
+  --name ts-debug \
+  torizon-serial:debug
+
+[CAN REMOVE -P 2345:2345]
+  OR WITH LIVE_MOUNT:
+
+  docker run -it \
+  --user 0 \
+  --mount type=bind,source=/home/torizon/projects/toradex/toradex-modular/src,target=/app \
+  --mount type=bind,source=/dev,target=/dev \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  -p 2345:2345 \
+  --name ts-debug \
+  torizon-serial:debug
+
+
+gdbserver :23450 ./torizon-serial
+  SHOULD RETURN SOMETHING LIKE:
+> Listening on port 2345
+ACTUAL:
+> Process ./torizon-serial created; pid = 9
+> Listening on port 2345

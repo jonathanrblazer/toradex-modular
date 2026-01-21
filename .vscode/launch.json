@@ -166,6 +166,18 @@
                 }
             ],
             "preLaunchTask": "deploy-torizon-arm64"
+        },
+        {
+            "name": "Attach to gdbserver (container)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/app/torizon-serial",
+            "miDebuggerServerAddress": "127.0.0.1:23450",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "cwd": "/app",
+            "MIMode": "gdb",
+            "stopAtEntry": true,
+            "externalConsole": false
         }
     ]
 }
