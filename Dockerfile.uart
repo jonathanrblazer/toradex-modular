@@ -7,7 +7,7 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY src/main.cpp .
+COPY src/main-uart.cpp .
 
 RUN g++ -std=c++17 -O2 main-uart.cpp -o uart_test
 

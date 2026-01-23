@@ -7,7 +7,7 @@
 #include <thread>
 
 int main() {
-    const char* device = "/dev/ttySTM1";
+    const char* device = "/dev/ttyS1";      // UART_2
     const int baudrate = B921600;
 
     int fd = open(device, O_RDWR | O_NOCTTY | O_SYNC);
@@ -31,7 +31,7 @@ int main() {
     tty.c_cflag |= CLOCAL | CREAD;               // enable receiver
     tty.c_cflag &= ~(PARENB | PARODD);            // no parity
     tty.c_cflag &= ~CSTOPB;                       // 1 stop bit
-    tty.c_cflag &= ~CRTSCTS;                      // ❌ no HW flow control (for now)
+    tty.c_cflag &= ~CRTSCTS;                      // no HW flow control (for now)
 
     tty.c_iflag = 0;
     tty.c_oflag = 0;
