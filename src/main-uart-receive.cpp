@@ -6,8 +6,8 @@
 #include <termios.h>
 #include <cstring>
 
-static constexpr const char* UART_DEV = "/dev/verdin-uart1";        // trying uart1 (ttyS0) instead of uart2 which is mapped to WKUP?
-static constexpr speed_t BAUDRATE = B1000000;
+static constexpr const char* UART_DEV = "/dev/ttyS0";       // trying uart1 (ttyS0) instead of uart2 which is mapped to WKUP?
+static constexpr speed_t BAUDRATE = B1000000;               // no comment
 static constexpr size_t BYTES_PER_LINE = 9;
 
 int open_uart(const char* device) {
@@ -60,6 +60,8 @@ int main() {
 
     std::vector<uint8_t> buffer;
     buffer.reserve(BYTES_PER_LINE);
+    
+    int counter = 0;
 
     while (true) {
         uint8_t byte;
@@ -85,6 +87,11 @@ int main() {
             std::cout << std::dec << std::endl;
 
             buffer.clear();
+        }
+
+        if (counter++ == 100) {
+            std::cout << "WHILE 100!\n";
+            counter = 0;
         }
     }
 
