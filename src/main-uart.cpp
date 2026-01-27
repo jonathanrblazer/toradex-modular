@@ -8,7 +8,7 @@
 
 int main() {
     const char* device = "/dev/ttyS1";      // UART_2
-    const int baudrate = B921600;
+    const int baudrate = B1000000;          // Seems Arduino doesn't like TXing 921600 so just keeping consistent
 
     int fd = open(device, O_RDWR | O_NOCTTY | O_SYNC);
     if (fd < 0) {
