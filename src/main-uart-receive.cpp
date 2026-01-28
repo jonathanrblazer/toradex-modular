@@ -49,6 +49,7 @@ int open_uart(const char* device) {
         return -1;
     }
 
+    std::cout << "UART " << UART_DEV << " Successfully opened, returning fd = " << fd << "\n";
     return fd;
 }
 
@@ -65,7 +66,11 @@ int main() {
 
     while (true) {
         uint8_t byte;
+        std::cout << "before read()\n";
+
         ssize_t n = read(fd, &byte, 1);
+        std::cout << "after read(), n=" << n << "\n";
+
         if (n <= 0) {
             perror("read");
             break;
@@ -89,8 +94,8 @@ int main() {
             buffer.clear();
         }
 
-        if (counter++ == 100) {
-            std::cout << "WHILE 100!\n";
+        if (++counter >= 10) {
+            std::cout << "WHILE 10!\n";
             counter = 0;
         }
     }

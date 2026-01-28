@@ -3,11 +3,10 @@ FROM --platform=linux/arm64 debian:bookworm-slim
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
+        entr \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
-COPY /src/main-uart-receive.cpp .
+# Optional but nice:
+WORKDIR /work
 
-RUN g++ -std=c++17 -O2 main-uart-receive.cpp -o uart_rx
-
-CMD ["./uart_rx"]
+CMD ["bash"]

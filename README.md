@@ -75,3 +75,8 @@ gdbserver :23450 ./torizon-serial
 ACTUAL:
 > Process ./torizon-serial created; pid = 9
 > Listening on port 2345
+
+RSYNC MADNESS
+
+find . \( -name "*.cpp" -o -name "*.h" \) | entr torasync
+
