@@ -5,9 +5,10 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <cstring>
+#include <sys/ioctl.h>
 
 static constexpr const char* UART_DEV = "/dev/ttyS0";       // trying uart1 (ttyS0) instead of uart2 which is mapped to WKUP?
-static constexpr speed_t BAUDRATE = B1000000;               // no comment
+static constexpr speed_t BAUDRATE = B115200;               // no comment
 static constexpr size_t BYTES_PER_LINE = 9;
 
 int open_uart(const char* device) {
@@ -31,7 +32,8 @@ int open_uart(const char* device) {
     cfsetispeed(&tty, BAUDRATE);
     cfsetospeed(&tty, BAUDRATE);
 
-    // 8-N-1
+    // 8-N-1?
+    tty.c_cflag &= ~CRTSCTS;   // NO RTS/CTS flow control
     tty.c_cflag &= ~PARENB;
     tty.c_cflag &= ~CSTOPB;
     tty.c_cflag &= ~CSIZE;
@@ -49,6 +51,20 @@ int open_uart(const char* device) {
         return -1;
     }
 
+    int mctrl;
+
+    // Read current modem control state
+    if (ioctl(fd, TIOCMGET, &mctrl) == -1) {
+        perror("TIOCMGET");
+    }
+
+    // Clear RTS (disable driver, enable receiver)
+    mctrl &= ~TIOCM_RTS;
+
+    if (ioctl(fd, TIOCMSET, &mctrl) == -1) {
+        perror("TIOCMSET");
+    }
+    
     std::cout << "UART " << UART_DEV << " Successfully opened, returning fd = " << fd << "\n";
     return fd;
 }

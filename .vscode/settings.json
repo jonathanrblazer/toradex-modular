@@ -21,6 +21,7 @@
     "torizon.restartDocker": false,
     "terminal.integrated.defaultProfile.linux": "bash",
     "containers.environment": {
+        "DOCKER_HOST": "tcp://192.168.8.173:2375",
         "DEBUG_SSH_PORT": "2230",
         "DEBUG_PORT1": "",
         "DEBUG_PORT2": "",
